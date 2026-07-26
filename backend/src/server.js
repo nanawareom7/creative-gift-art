@@ -141,7 +141,7 @@ app.use('/api/dashboard', dashboardRoutes);
 // Serve React Frontend
 // ===============================
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '../public')));
 
 app.get('*', (req, res) => {
   // Allow API routes to continue using Express routers
@@ -152,7 +152,7 @@ app.get('*', (req, res) => {
     });
   }
 
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.join(__dirname, '../public', 'index.html'));
 });
 
 // ─── Error Handling ───────────────────────────────────────────────────────────
