@@ -137,13 +137,22 @@ app.use('/api/upload', uploadRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 
 // ─── Root Route ───────────────────────────────────────────────────────────────
-app.get('/', (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: 'Welcome to Creative Gift Art API',
-    version: '1.0.0',
-    health: '/health',
-  });
+// ===============================
+// Serve React Frontend
+// ===============================
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.get('*', (req, res) => {
+  // Allow API routes to continue using Express routers
+  if (req.path.startsWith('/api') || req.path === '/health') {
+    return res.status(404).json({
+      success: false,
+      message: 'API endpoint not found',
+    });
+  }
+
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // ─── Error Handling ───────────────────────────────────────────────────────────
