@@ -12,11 +12,11 @@ const SLIDES = [
     label: "Wedding Invitations",
     subtitle: "Timeless elegance for your special day",
   },
-  {
+  /*{
     image: slide1,
     label: "Custom Stationery",
     subtitle: "Gold foil details crafted to perfection",
-  },
+  },*/
   {
     image: slide2,
     label: "Digital Invitations",
@@ -115,11 +115,10 @@ export default function HeroSlider() {
             key={i}
             onClick={() => setCurrent(i)}
             aria-label={`Go to slide ${i + 1}`}
-            className={`rounded-full transition-all duration-300 ${
-              i === current
+            className={`rounded-full transition-all duration-300 ${i === current
                 ? "w-6 h-1.5 bg-primary"
                 : "w-1.5 h-1.5 bg-white/50 hover:bg-white/80"
-            }`}
+              }`}
           />
         ))}
       </div>

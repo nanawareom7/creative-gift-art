@@ -16,7 +16,7 @@ const heroImages = [
   },
   {
     id: 2,
-    image: slide1,
+    image: slide3,
   },
   {
     id: 3,
@@ -24,7 +24,7 @@ const heroImages = [
   },
   {
     id: 4,
-    image: slide3,
+    image: slide1,
   },
 ];
 
