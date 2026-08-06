@@ -11,7 +11,7 @@ export default function Footer() {
     <footer className="relative mt-16 bg-gradient-to-b from-background to-champagne/30 border-t border-border">
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid md:grid-cols-4 gap-10">
+        <div className="grid sm:grid-cols-2 md:grid-cols-5 gap-10">
           <div className="md:col-span-1">
             <Link to="/" className="flex items-center gap-3">
               <img src={logo} alt="Creative Gift Art" className="h-12 w-auto" />
@@ -44,6 +44,7 @@ export default function Footer() {
             <FLink to="/category/baby-shower">Baby Shower</FLink>
             <FLink to="/category/save-the-date">Save The Date</FLink>
           </FooterCol>
+
 
           <FooterCol title="Contact">
             <a

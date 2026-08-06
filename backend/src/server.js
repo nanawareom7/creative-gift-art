@@ -31,29 +31,53 @@ app.use(
 );
 
 // ─── CORS ─────────────────────────────────────────────────────────────────────
-const allowedOrigins = process.env.CLIENT_URL
-  ? process.env.CLIENT_URL.split(',').map((o) => o.trim())
-  : ['http://localhost:3000', 'http://localhost:5173'];
+// All required production + development origins are hardcoded here so the
+// admin panel login never fails due to a missing CLIENT_URL env var.
+// CLIENT_URL (comma-separated) can still ADD extra origins without removing any.
+const HARDCODED_ORIGINS = [
+  'https://creativegiftarts.com',
+  'https://www.creativegiftart.com',
+  'https://creativegiftart.in',
+  'https://www.creativegiftart.in',
+  'https://mediumpurple-scorpion-834332.hostingersite.com',
+  'http://localhost:5173',
+  'http://localhost:3000',
+];
 
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      // Allow requests with no origin (mobile apps, Postman, curl, same-origin)
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      }
-      // In development, be permissive; in production, enforce
-      if (process.env.NODE_ENV !== 'production') {
-        return callback(null, true);
-      }
-      callback(new Error(`CORS policy: origin '${origin}' not allowed`));
-    },
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true,
-  })
-);
+const envOrigins = process.env.CLIENT_URL
+  ? process.env.CLIENT_URL.split(',').map((o) => o.trim()).filter(Boolean)
+  : [];
+
+// Deduplicate so env var can safely overlap with hardcoded list
+const allowedOrigins = [...new Set([...HARDCODED_ORIGINS, ...envOrigins])];
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    // Allow requests with no origin (mobile apps, Postman, curl, same-origin)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    // In development be permissive; in production enforce strictly
+    if (process.env.NODE_ENV !== 'production') {
+      return callback(null, true);
+    }
+    callback(new Error(`CORS policy: origin '${origin}' not allowed`));
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+  // Cache preflight for 10 minutes — reduces OPTIONS round-trips in production
+  maxAge: 600,
+};
+
+app.use(cors(corsOptions));
+
+// ─── Preflight (OPTIONS) handler ──────────────────────────────────────────────
+// MUST be declared BEFORE rate limiters so the browser's preflight OPTIONS
+// request is answered with 204 immediately, without hitting any limiter or
+// auth middleware. This is what makes admin-panel login reliable in production.
+app.options('*', cors(corsOptions));
 
 // ─── Rate Limiting ────────────────────────────────────────────────────────────
 const globalLimiter = rateLimit({

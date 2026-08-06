@@ -1,10 +1,10 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
-import digitalImg from "@/assets/collection-digital.jpg";
-import stationeryImg from "@/assets/collection-stationery.jpg";
-import giftsImg from "@/assets/collection-gifts.jpg";
-import websiteImg from "@/assets/collection-website.jpg";
+import digitalImg from "@/assets/collection-digital.png";
+import stationeryImg from "@/assets/collection-stationery.png";
+import giftsImg from "@/assets/collection-gifts.png";
+import websiteImg from "@/assets/collection-website.png";
 
 const COLLECTIONS = [
   {
@@ -49,23 +49,30 @@ export default function CollectionsSection() {
 
         {/* Mobile: horizontal scroll | Desktop: grid */}
         <div className="mt-14">
-          {/* Mobile slider */}
-          <div
-            className="lg:hidden flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-2 -mx-1 px-1"
-            style={{ scrollbarWidth: "none" }}
-          >
-            {COLLECTIONS.map((c, i) => (
-              <motion.div
-                key={c.title}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-80px" }}
-                transition={{ duration: 0.6, delay: i * 0.08 }}
-                className="shrink-0 snap-start w-[75vw] sm:w-[45vw]"
-              >
-                <CollectionCard c={c} />
-              </motion.div>
-            ))}
+          {/* ── Mobile slider ──
+              Outer div: overflow-hidden clips vertically so cards don't bleed
+              into sections above/below, but the inner div overflows horizontally.
+              pr-[20vw] on the inner scroll row ensures ~20-25 % of the NEXT
+              card is always visible, giving a clear scroll affordance.
+          */}
+          <div className="lg:hidden overflow-hidden">
+            <div
+              className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-3 -mx-4 px-4 pr-[20vw] sm:pr-[12vw]"
+              style={{ scrollbarWidth: "none", msOverflowStyle: "none", WebkitOverflowScrolling: "touch" }}
+            >
+              {COLLECTIONS.map((c, i) => (
+                <motion.div
+                  key={c.title}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-80px" }}
+                  transition={{ duration: 0.6, delay: i * 0.08 }}
+                  className="shrink-0 snap-start w-[72vw] sm:w-[43vw]"
+                >
+                  <CollectionCard c={c} />
+                </motion.div>
+              ))}
+            </div>
           </div>
 
           {/* Desktop grid */}

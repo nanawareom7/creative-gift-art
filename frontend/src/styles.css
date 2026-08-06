@@ -210,3 +210,21 @@
 .break-inside-avoid {
   break-inside: avoid;
 }
+
+/* ─── Hero section — responsive height ─────────────────────────────────────
+   Mobile  : compact ~50 % of the viewport height so the Collections section
+             is immediately visible below, matching a premium editorial layout.
+   sm+ (≥ 640 px): full immersive height, identical to the original desktop UX.
+────────────────────────────────────────────────────────────────────────────── */
+.hero-section {
+  /* Mobile: tall enough to show heading+subtitle+CTAs, short enough to
+     hint at the content below. clamp keeps it sane on both small phones
+     (min 260 px) and landscape orientation (max 420 px). */
+  height: clamp(260px, 50vh, 420px);
+}
+
+@media (min-width: 640px) {
+  .hero-section {
+    height: clamp(420px, 78vh, 780px);
+  }
+}

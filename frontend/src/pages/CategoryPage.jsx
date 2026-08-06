@@ -133,8 +133,8 @@ export default function CategoryPage() {
                   key={f.id}
                   onClick={() => setTypeFilter(f.id)}
                   className={`px-5 py-1.5 rounded-full text-sm transition-all border font-medium ${typeFilter === f.id
-                      ? "bg-primary text-primary-foreground border-primary"
-                      : "border-border text-foreground/70 hover:border-primary hover:text-primary"
+                    ? "bg-primary text-primary-foreground border-primary"
+                    : "border-border text-foreground/70 hover:border-primary hover:text-primary"
                     }`}
                 >
                   {f.label}
