@@ -15,6 +15,10 @@ import AdminDashboard from "@/pages/AdminDashboard";
 import AdminTemplates from "@/pages/AdminTemplates";
 import AdminCategories from "@/pages/AdminCategories";
 import AdminTemplateForm from "@/pages/AdminTemplateForm";
+import BlogList from "@/pages/BlogList";
+import BlogDetail from "@/pages/BlogDetail";
+import AdminBlogs from "@/pages/AdminBlogs";
+import AdminBlogForm from "@/pages/AdminBlogForm";
 import NotFound from "@/pages/NotFound";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import AdminLayout from "@/components/AdminLayout";
@@ -36,6 +40,8 @@ export default function App() {
             <Route path="/template/:slug" element={<TemplateDetails />} />
             <Route path="/search" element={<SearchPage />} />
             <Route path="/about" element={<About />} />
+            <Route path="/blog" element={<BlogList />} />
+            <Route path="/blog/:slug" element={<BlogDetail />} />
 
             <Route path="/om-admin/login" element={<Login />} />
             <Route
@@ -51,6 +57,9 @@ export default function App() {
               <Route path="templates/new" element={<AdminTemplateForm />} />
               <Route path="templates/:id/edit" element={<AdminTemplateForm />} />
               <Route path="categories" element={<AdminCategories />} />
+              <Route path="blogs" element={<AdminBlogs />} />
+              <Route path="blogs/new" element={<AdminBlogForm />} />
+              <Route path="blogs/:id/edit" element={<AdminBlogForm />} />
             </Route>
 
             <Route path="*" element={<NotFound />} />

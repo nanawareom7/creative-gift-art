@@ -1,5 +1,5 @@
 import { NavLink, Outlet, useNavigate, Link } from "react-router-dom";
-import { LayoutDashboard, FileImage, Tags, Layers, LogOut, ExternalLink } from "lucide-react";
+import { LayoutDashboard, FileImage, Tags, Layers, BookOpen, LogOut, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import logo from "@/assets/cga-logo.png";
 
@@ -42,6 +42,9 @@ export default function AdminLayout() {
           <NavLink to="/om-admin/services" className={linkCls}>
             <Layers className="h-4 w-4" /> Services
           </NavLink>
+          <NavLink to="/om-admin/blogs" className={linkCls}>
+            <BookOpen className="h-4 w-4" /> Blogs
+          </NavLink>
         </nav>
         <div className="p-3 border-t space-y-2">
           <Link
@@ -71,6 +74,7 @@ export default function AdminLayout() {
           <NavLink to="/om-admin/templates" className={linkCls}>Templates</NavLink>
           <NavLink to="/om-admin/categories" className={linkCls}>Categories</NavLink>
           <NavLink to="/om-admin/services" className={linkCls}>Services</NavLink>
+          <NavLink to="/om-admin/blogs" className={linkCls}>Blogs</NavLink>
         </div>
         <main className="p-5 md:p-8 flex-1 overflow-x-auto">
           <Outlet />

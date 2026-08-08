@@ -158,6 +158,24 @@ export const dashboardApi = {
   stats: () => api.get("/dashboard/stats").then((r) => r.data),
 };
 
+/* ── Blogs ─────────────────────────────────────────────────────────────────── */
+export const blogsApi = {
+  listPublished: (params = {}) =>
+    api.get("/blogs", { params }).then((r) => r.data),
+  getBySlug: (slug) =>
+    api.get(`/blogs/${slug}`).then((r) => r.data),
+  listAdmin: (params = {}) =>
+    api.get("/blogs/admin", { params }).then((r) => r.data),
+  create: (body) =>
+    api.post("/blogs", body).then((r) => r.data),
+  update: (id, body) =>
+    api.put(`/blogs/${id}`, body).then((r) => r.data),
+  remove: (id) =>
+    api.delete(`/blogs/${id}`).then((r) => r.data),
+  togglePublish: (id, status) =>
+    api.put(`/blogs/${id}/publish`, { status }).then((r) => r.data),
+};
+
 /* ── WhatsApp ──────────────────────────────────────────────────────────────── */
 export const WHATSAPP_NUMBER =
   import.meta.env.VITE_WHATSAPP_NUMBER || "917304807878";
@@ -170,7 +188,7 @@ export const buildWhatsAppUrl = (message) => {
 };
 
 /* ── Response helpers ──────────────────────────────────────────────────────── */
-// Backend wraps lists as:  { success, message, data: { templates/categories/services, pagination } }
+// Backend wraps lists as:  { success, message, data: { templates/categories/services/blogs, pagination } }
 // These helpers extract the array safely regardless of key name.
 
 export const extractTemplates = (res) => {
@@ -192,6 +210,14 @@ export const extractCategories = (res) => {
 export const extractServices = (res) => {
   const d = res?.data;
   return Array.isArray(d?.services) ? d.services
+    : Array.isArray(d?.items) ? d.items
+      : Array.isArray(d) ? d
+        : [];
+};
+
+export const extractBlogs = (res) => {
+  const d = res?.data;
+  return Array.isArray(d?.blogs) ? d.blogs
     : Array.isArray(d?.items) ? d.items
       : Array.isArray(d) ? d
         : [];

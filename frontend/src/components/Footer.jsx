@@ -34,6 +34,7 @@ export default function Footer() {
             <FLink to="/collection/website">Wedding Websites</FLink>
             <FLink to="/category/stationery">Stationery</FLink>
             <FLink to="/category/gifts">Customized Gifts</FLink>
+            <FLink to="/blog">Blog</FLink>
             <FLink to="/about">About Us</FLink>
           </FooterCol>
 
