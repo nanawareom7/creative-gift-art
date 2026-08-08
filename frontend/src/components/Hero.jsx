@@ -125,147 +125,121 @@ export default function Hero() {
       </AnimatePresence>
 
       {/* =========================================================
-          DESKTOP HERO CONTENT
-          
-          Hidden completely on mobile.
+          DESKTOP HERO CONTENT (lg and above)
           
           Position:
-          - horizontally centered
-          - middle/lower portion of image
-          - no background
-          - no image overlay
+          - Horizontally centered (left: 50%, translateX(-50%))
+          - Vertically positioned in lower-middle portion (top: ~70%)
+          - Heading = 1 single line (whitespace-nowrap)
+          - Subtitle = 1 single line (whitespace-nowrap)
+          - Buttons directly below subtitle
           ========================================================= */}
-      <div className="hidden sm:flex absolute inset-0 z-[5] items-end justify-center pointer-events-none">
-        <div className="w-full max-w-7xl px-6 lg:px-8 pb-[10%]">
-          <div className="max-w-3xl mx-auto text-center pointer-events-auto">
+      <div className="hidden lg:block absolute left-1/2 top-[70%] -translate-x-1/2 -translate-y-1/2 z-[5] w-max max-w-[95vw] px-4 text-center pointer-events-none">
+        <div className="pointer-events-auto flex flex-col items-center justify-center">
 
-            {/* Eyebrow */}
-            <motion.div
-              initial={{
-                opacity: 0,
-                y: 16,
+          {/* Main Heading — MUST BE 1 SINGLE LINE */}
+          <motion.h1
+            initial={{
+              opacity: 0,
+              y: 20,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            transition={{
+              duration: 0.75,
+              delay: 0.1,
+            }}
+            className="font-serif whitespace-nowrap text-white"
+            style={{
+              fontSize: "clamp(24px, 3.1vw, 50px)",
+              lineHeight: 1.15,
+              textShadow: "0 2px 16px rgba(0, 0, 0, 0.85), 0 4px 32px rgba(0, 0, 0, 0.65)",
+            }}
+          >
+            Every Celebration{" "}
+            <span className="italic font-display text-white">
+              Begins
+            </span>{" "}
+            with an Invitation.
+          </motion.h1>
+
+          {/* Subtitle — MUST BE 1 SINGLE LINE */}
+          <motion.p
+            initial={{
+              opacity: 0,
+              y: 16,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            transition={{
+              duration: 0.7,
+              delay: 0.22,
+            }}
+            className="mt-3.5 whitespace-nowrap text-white"
+            style={{
+              fontSize: "clamp(12px, 1.1vw, 18px)",
+              textShadow: "0 2px 14px rgba(0, 0, 0, 0.85), 0 3px 20px rgba(0, 0, 0, 0.6)",
+            }}
+          >
+            Beautifully crafted digital and printed invitation for every precious moment.
+          </motion.p>
+
+          {/* CTA Buttons */}
+          <motion.div
+            initial={{
+              opacity: 0,
+              y: 12,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            transition={{
+              duration: 0.65,
+              delay: 0.35,
+            }}
+            className="mt-6 flex flex-wrap gap-3 justify-center items-center"
+          >
+            {/* Explore Collections */}
+            <Button
+              asChild
+              size="lg"
+              className="rounded-full h-11 px-7 text-sm font-medium"
+              style={{
+                background:
+                  "linear-gradient(135deg, #c9a227 0%, #e8c97d 60%, #c9a227 100%)",
+                color: "#1a0e00",
+                border: "none",
+                boxShadow:
+                  "0 4px 20px rgba(201,162,39,0.35)",
               }}
-              animate={{
-                opacity: 1,
-                y: 0,
-              }}
-              transition={{
-                duration: 0.6,
-              }}
-              className="inline-flex items-center gap-2 text-[11px] tracking-[0.3em] uppercase text-white/85 mb-5"
             >
-              <span className="h-px w-6 bg-white/70" />
+              <Link to="/collection/all">
+                Explore Collections
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
 
-              Luxury Invitations
-
-              <span className="h-px w-6 bg-white/70" />
-            </motion.div>
-
-            {/* Main Heading */}
-            <motion.h1
-              initial={{
-                opacity: 0,
-                y: 20,
-              }}
-              animate={{
-                opacity: 1,
-                y: 0,
-              }}
-              transition={{
-                duration: 0.75,
-                delay: 0.1,
-              }}
-              className="font-serif text-5xl md:text-6xl leading-[1.08] text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)]"
+            {/* WhatsApp */}
+            <Button
+              asChild
+              size="lg"
+              className="rounded-full h-11 px-7 text-sm font-medium border border-white/35 text-white bg-white/10 hover:bg-white/20 hover:border-white/55 backdrop-blur-sm transition"
             >
-              Every Celebration{" "}
-              <span
-                className="italic"
-                style={{
-                  background:
-                    "linear-gradient(135deg, #e8c97d 0%, #c9a227 50%, #f0d880 100%)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                }}
+              <a
+                href={buildWhatsAppUrl()}
+                target="_blank"
+                rel="noreferrer"
               >
-                Begins
-              </span>{" "}
-              with an Invitation.
-            </motion.h1>
-
-            {/* Description */}
-            <motion.p
-              initial={{
-                opacity: 0,
-                y: 16,
-              }}
-              animate={{
-                opacity: 1,
-                y: 0,
-              }}
-              transition={{
-                duration: 0.7,
-                delay: 0.22,
-              }}
-              className="mt-5 text-lg text-white/90 leading-relaxed max-w-2xl mx-auto drop-shadow-[0_2px_6px_rgba(0,0,0,0.35)]"
-            >
-              Beautifully crafted digital and printed invitations for
-              weddings, engagements, birthdays, and every precious moment.
-            </motion.p>
-
-            {/* CTA Buttons */}
-            <motion.div
-              initial={{
-                opacity: 0,
-                y: 12,
-              }}
-              animate={{
-                opacity: 1,
-                y: 0,
-              }}
-              transition={{
-                duration: 0.65,
-                delay: 0.35,
-              }}
-              className="mt-8 flex flex-wrap gap-3 justify-center"
-            >
-              {/* Explore Collections */}
-              <Button
-                asChild
-                size="lg"
-                className="rounded-full h-11 px-7 text-sm font-medium"
-                style={{
-                  background:
-                    "linear-gradient(135deg, #c9a227 0%, #e8c97d 60%, #c9a227 100%)",
-                  color: "#1a0e00",
-                  border: "none",
-                  boxShadow:
-                    "0 4px 20px rgba(201,162,39,0.35)",
-                }}
-              >
-                <Link to="/collection/all">
-                  Explore Collections
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
-
-              {/* WhatsApp */}
-              <Button
-                asChild
-                size="lg"
-                className="rounded-full h-11 px-7 text-sm font-medium border border-white/35 text-white bg-white/10 hover:bg-white/20 hover:border-white/55 backdrop-blur-sm transition"
-              >
-                <a
-                  href={buildWhatsAppUrl()}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <MessageCircle className="mr-2 h-4 w-4 text-[#25D366]" />
-                  WhatsApp
-                </a>
-              </Button>
-            </motion.div>
-          </div>
+                <MessageCircle className="mr-2 h-4 w-4 text-[#25D366]" />
+                WhatsApp
+              </a>
+            </Button>
+          </motion.div>
         </div>
       </div>
 
