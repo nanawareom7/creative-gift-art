@@ -1,17 +1,23 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ArrowRight, MessageCircle, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  ArrowRight,
+  MessageCircle,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { buildWhatsAppUrl } from "@/services/api";
+
 import websiteCoverVideo from "@/assets/webiste-cover.mp4";
 import heroImg from "@/assets/hero-invitation.jpg";
 import slide1 from "@/assets/hero-slide-1.png";
 import slide2 from "@/assets/hero-slide-2.png";
 import slide3 from "@/assets/hero-slide-3.png";
 
-// Slide 0 = video, slides 1–4 = images.
-// Both coexist: video is always in the DOM, images are rendered only when active.
+// Slide 0 = video
+// Slides 1–4 = images
 const SLIDES = [
   { type: "video" },
   { type: "image", id: 1, image: heroImg },
@@ -23,6 +29,7 @@ const SLIDES = [
 export default function Hero() {
   const [current, setCurrent] = useState(0);
   const [paused, setPaused] = useState(false);
+
   const timerRef = useRef(null);
   const videoRef = useRef(null);
 
@@ -34,31 +41,40 @@ export default function Hero() {
     setCurrent((c) => (c - 1 + SLIDES.length) % SLIDES.length);
   }, []);
 
-  // Auto-advance every 5 s, pause on hover
+  // Auto advance every 5 seconds
   useEffect(() => {
     if (paused) return;
+
     timerRef.current = setInterval(next, 5000);
+
     return () => clearInterval(timerRef.current);
   }, [next, paused]);
 
-  // Play/pause video depending on active slide
+  // Play / pause video depending on active slide
   useEffect(() => {
-    const v = videoRef.current;
-    if (!v) return;
+    const video = videoRef.current;
+
+    if (!video) return;
+
     if (current === 0) {
-      v.play().catch(() => {}); // silently handle autoplay policy
+      video.play().catch(() => { });
     } else {
-      v.pause();
+      video.pause();
     }
   }, [current]);
 
   return (
     <section
-      className="hero-section relative w-full overflow-hidden"
+      className="hero-section relative w-full overflow-hidden bg-background"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      {/* ── Video background — always in DOM, fades in/out ── */}
+      {/* =========================================================
+          HERO VIDEO
+          
+          Mobile  : object-contain
+          Desktop : object-cover
+          ========================================================= */}
       <video
         ref={videoRef}
         src={websiteCoverVideo}
@@ -67,67 +83,106 @@ export default function Hero() {
         muted
         playsInline
         preload="auto"
-        className="absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-[1100ms]"
-        style={{ opacity: current === 0 ? 1 : 0 }}
+        className="absolute inset-0 w-full h-full object-contain sm:object-cover object-center transition-opacity duration-[1100ms]"
+        style={{
+          opacity: current === 0 ? 1 : 0,
+        }}
         aria-hidden="true"
       />
 
-      {/* ── Image slides (slides 1–4) — AnimatePresence for smooth crossfade ── */}
+      {/* =========================================================
+          HERO IMAGE SLIDES
+          
+          Mobile  : object-contain
+          Desktop : object-cover
+          ========================================================= */}
       <AnimatePresence mode="sync" initial={false}>
         {SLIDES[current].type === "image" && (
           <motion.img
             key={SLIDES[current].id}
             src={SLIDES[current].image}
             alt="Creative Gift Art luxury invitations"
-            className="absolute inset-0 w-full h-full object-cover object-center"
+            className="absolute inset-0 w-full h-full object-contain sm:object-cover object-center"
             loading="eager"
             decoding="sync"
-            initial={{ opacity: 0, scale: 1.04 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.97 }}
-            transition={{ duration: 1.1, ease: "easeInOut" }}
+            initial={{
+              opacity: 0,
+              scale: 1.02,
+            }}
+            animate={{
+              opacity: 1,
+              scale: 1,
+            }}
+            exit={{
+              opacity: 0,
+            }}
+            transition={{
+              duration: 1.1,
+              ease: "easeInOut",
+            }}
           />
         )}
       </AnimatePresence>
 
-      {/* ── Gradient overlays ── */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/40 to-black/60" />
-      <div className="absolute inset-0 bg-gradient-to-r from-black/35 via-transparent to-transparent" />
-
-      {/* ── Content ── */}
-      {/*
-        Mobile:  vertically centered, text centered, compact spacing
-        Desktop: vertically centered, text left-aligned, original spacing
-      */}
-      <div className="relative h-full flex items-center">
-        <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 w-full">
-          <div className="max-w-lg mx-auto sm:mx-0 text-center sm:text-left">
+      {/* =========================================================
+          DESKTOP HERO CONTENT
+          
+          Hidden completely on mobile.
+          
+          Position:
+          - horizontally centered
+          - middle/lower portion of image
+          - no background
+          - no image overlay
+          ========================================================= */}
+      <div className="hidden sm:flex absolute inset-0 z-[5] items-end justify-center pointer-events-none">
+        <div className="w-full max-w-7xl px-6 lg:px-8 pb-[10%]">
+          <div className="max-w-3xl mx-auto text-center pointer-events-auto">
 
             {/* Eyebrow */}
             <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="inline-flex items-center gap-2 text-[10px] sm:text-[11px] tracking-[0.3em] uppercase text-white/70 mb-3 sm:mb-5"
+              initial={{
+                opacity: 0,
+                y: 16,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              transition={{
+                duration: 0.6,
+              }}
+              className="inline-flex items-center gap-2 text-[11px] tracking-[0.3em] uppercase text-white/85 mb-5"
             >
-              <span className="h-px w-5 sm:w-6 bg-white/50" />
+              <span className="h-px w-6 bg-white/70" />
+
               Luxury Invitations
-              {/* Show right rule on mobile only (for symmetric centered look) */}
-              <span className="h-px w-5 bg-white/50 sm:hidden" />
+
+              <span className="h-px w-6 bg-white/70" />
             </motion.div>
 
-            {/* Heading */}
+            {/* Main Heading */}
             <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.75, delay: 0.1 }}
-              className="font-serif text-[1.75rem] leading-[1.12] sm:text-5xl md:text-6xl sm:leading-[1.08] text-white"
+              initial={{
+                opacity: 0,
+                y: 20,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              transition={{
+                duration: 0.75,
+                delay: 0.1,
+              }}
+              className="font-serif text-5xl md:text-6xl leading-[1.08] text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)]"
             >
               Every Celebration{" "}
               <span
                 className="italic"
                 style={{
-                  background: "linear-gradient(135deg, #e8c97d 0%, #c9a227 50%, #f0d880 100%)",
+                  background:
+                    "linear-gradient(135deg, #e8c97d 0%, #c9a227 50%, #f0d880 100%)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                   backgroundClip: "text",
@@ -138,47 +193,74 @@ export default function Hero() {
               with an Invitation.
             </motion.h1>
 
-            {/* Subtitle */}
+            {/* Description */}
             <motion.p
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.22 }}
-              className="mt-3 sm:mt-5 text-sm sm:text-lg text-white/75 leading-relaxed"
+              initial={{
+                opacity: 0,
+                y: 16,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              transition={{
+                duration: 0.7,
+                delay: 0.22,
+              }}
+              className="mt-5 text-lg text-white/90 leading-relaxed max-w-2xl mx-auto drop-shadow-[0_2px_6px_rgba(0,0,0,0.35)]"
             >
-              Beautifully crafted digital and printed invitations for weddings,
-              engagements, birthdays, and every precious moment.
+              Beautifully crafted digital and printed invitations for
+              weddings, engagements, birthdays, and every precious moment.
             </motion.p>
 
             {/* CTA Buttons */}
             <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.65, delay: 0.35 }}
-              className="mt-5 sm:mt-8 flex flex-wrap gap-2.5 sm:gap-3 justify-center sm:justify-start"
+              initial={{
+                opacity: 0,
+                y: 12,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              transition={{
+                duration: 0.65,
+                delay: 0.35,
+              }}
+              className="mt-8 flex flex-wrap gap-3 justify-center"
             >
+              {/* Explore Collections */}
               <Button
                 asChild
                 size="lg"
-                className="rounded-full h-10 sm:h-11 px-5 sm:px-7 text-xs sm:text-sm font-medium"
+                className="rounded-full h-11 px-7 text-sm font-medium"
                 style={{
-                  background: "linear-gradient(135deg, #c9a227 0%, #e8c97d 60%, #c9a227 100%)",
+                  background:
+                    "linear-gradient(135deg, #c9a227 0%, #e8c97d 60%, #c9a227 100%)",
                   color: "#1a0e00",
                   border: "none",
-                  boxShadow: "0 4px 20px rgba(201,162,39,0.35)",
+                  boxShadow:
+                    "0 4px 20px rgba(201,162,39,0.35)",
                 }}
               >
                 <Link to="/collection/all">
-                  Explore Collections <ArrowRight className="ml-1.5 h-3.5 w-3.5 sm:ml-2 sm:h-4 sm:w-4" />
+                  Explore Collections
+                  <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
 
+              {/* WhatsApp */}
               <Button
                 asChild
                 size="lg"
-                className="rounded-full h-10 sm:h-11 px-5 sm:px-7 text-xs sm:text-sm font-medium border border-white/35 text-white bg-white/10 hover:bg-white/20 hover:border-white/55 backdrop-blur-sm transition"
+                className="rounded-full h-11 px-7 text-sm font-medium border border-white/35 text-white bg-white/10 hover:bg-white/20 hover:border-white/55 backdrop-blur-sm transition"
               >
-                <a href={buildWhatsAppUrl()} target="_blank" rel="noreferrer">
-                  <MessageCircle className="mr-1.5 h-3.5 w-3.5 sm:mr-2 sm:h-4 sm:w-4 text-[#25D366]" />
+                <a
+                  href={buildWhatsAppUrl()}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <MessageCircle className="mr-2 h-4 w-4 text-[#25D366]" />
                   WhatsApp
                 </a>
               </Button>
@@ -187,7 +269,9 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* ── Prev / Next — hidden on mobile, shown sm+ ── */}
+      {/* =========================================================
+          DESKTOP PREVIOUS BUTTON
+          ========================================================= */}
       <button
         onClick={prev}
         aria-label="Previous slide"
@@ -200,6 +284,10 @@ export default function Hero() {
       >
         <ChevronLeft className="h-4 w-4 text-white" />
       </button>
+
+      {/* =========================================================
+          DESKTOP NEXT BUTTON
+          ========================================================= */}
       <button
         onClick={next}
         aria-label="Next slide"
@@ -213,7 +301,9 @@ export default function Hero() {
         <ChevronRight className="h-4 w-4 text-white" />
       </button>
 
-      {/* ── Swipe hint on mobile (left–right chevrons, small) ── */}
+      {/* =========================================================
+          MOBILE PREVIOUS BUTTON
+          ========================================================= */}
       <button
         onClick={prev}
         aria-label="Previous slide"
@@ -226,6 +316,10 @@ export default function Hero() {
       >
         <ChevronLeft className="h-3.5 w-3.5 text-white" />
       </button>
+
+      {/* =========================================================
+          MOBILE NEXT BUTTON
+          ========================================================= */}
       <button
         onClick={next}
         aria-label="Next slide"
@@ -239,7 +333,9 @@ export default function Hero() {
         <ChevronRight className="h-3.5 w-3.5 text-white" />
       </button>
 
-      {/* ── Dot Indicators ── */}
+      {/* =========================================================
+          SLIDE DOTS
+          ========================================================= */}
       <div className="absolute bottom-4 sm:bottom-5 left-1/2 -translate-x-1/2 z-10 flex items-center gap-1.5 sm:gap-2">
         {SLIDES.map((_, i) => (
           <button
@@ -251,19 +347,20 @@ export default function Hero() {
               width: i === current ? "20px" : "6px",
               height: "6px",
               borderRadius: "9999px",
-              background: i === current
-                ? "linear-gradient(135deg, #e8c97d, #c9a227)"
-                : "rgba(255,255,255,0.45)",
+              background:
+                i === current
+                  ? "linear-gradient(135deg, #e8c97d, #c9a227)"
+                  : "rgba(255,255,255,0.45)",
               border: "none",
               cursor: "pointer",
-              boxShadow: i === current ? "0 0 8px rgba(201,162,39,0.6)" : "none",
+              boxShadow:
+                i === current
+                  ? "0 0 8px rgba(201,162,39,0.6)"
+                  : "none",
             }}
           />
         ))}
       </div>
-
-      {/* ── Bottom page-blend ── */}
-      <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-background/60 to-transparent pointer-events-none" />
     </section>
   );
 }

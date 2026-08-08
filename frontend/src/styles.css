@@ -53,16 +53,20 @@
   --radius: 0.75rem;
 
   /* Luxury champagne palette */
-  --background: oklch(0.985 0.008 85);    /* warm white */
-  --foreground: oklch(0.18 0.02 60);      /* near black warm */
+  --background: oklch(0.985 0.008 85);
+  /* warm white */
+  --foreground: oklch(0.18 0.02 60);
+  /* near black warm */
   --card: oklch(0.99 0.005 85);
   --card-foreground: oklch(0.18 0.02 60);
   --popover: oklch(0.99 0.005 85);
   --popover-foreground: oklch(0.18 0.02 60);
 
-  --primary: oklch(0.62 0.11 75);         /* champagne gold */
+  --primary: oklch(0.62 0.11 75);
+  /* champagne gold */
   --primary-foreground: oklch(0.985 0.008 85);
-  --secondary: oklch(0.95 0.018 80);      /* soft beige */
+  --secondary: oklch(0.95 0.018 80);
+  /* soft beige */
   --secondary-foreground: oklch(0.22 0.02 60);
 
   --muted: oklch(0.94 0.012 80);
@@ -93,8 +97,14 @@
 }
 
 @layer base {
-  * { border-color: var(--color-border); }
-  html { scroll-behavior: smooth; }
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
@@ -103,11 +113,19 @@
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
   }
-  h1, h2, h3, h4, .font-serif {
+
+  h1,
+  h2,
+  h3,
+  h4,
+  .font-serif {
     font-family: var(--font-serif);
     letter-spacing: -0.01em;
   }
-  .font-display { font-family: var(--font-display); }
+
+  .font-display {
+    font-family: var(--font-display);
+  }
 }
 
 @utility gold-gradient-text {
@@ -151,7 +169,8 @@
 .slider-card {
   flex-shrink: 0;
   scroll-snap-align: start;
-  width: calc(46% - 6px);  /* 2 visible + half peek on mobile */
+  width: calc(46% - 6px);
+  /* 2 visible + half peek on mobile */
 }
 
 @media (min-width: 640px) {
@@ -202,6 +221,7 @@
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
+
 *::-webkit-scrollbar {
   display: none;
 }
@@ -217,14 +237,28 @@
    sm+ (≥ 640 px): full immersive height, identical to the original desktop UX.
 ────────────────────────────────────────────────────────────────────────────── */
 .hero-section {
-  /* Mobile: tall enough to show heading+subtitle+CTAs, short enough to
-     hint at the content below. clamp keeps it sane on both small phones
-     (min 260 px) and landscape orientation (max 420 px). */
-  height: clamp(260px, 50vh, 420px);
+  /*
+    MOBILE
+
+    Hero follows a 16:9 media ratio.
+    This allows the video/images to fill the available width
+    without being vertically cropped.
+  */
+  aspect-ratio: 16 / 9;
+
+  width: 100%;
+  min-height: 0;
+  height: auto;
 }
 
 @media (min-width: 640px) {
   .hero-section {
+    /*
+      DESKTOP
+
+      Keep the original desktop hero height.
+    */
+    aspect-ratio: auto;
     height: clamp(420px, 78vh, 780px);
   }
 }
