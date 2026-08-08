@@ -17,6 +17,7 @@ const categoryRoutes = require('./routes/categoryRoutes');
 const templateRoutes = require('./routes/templateRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
+const blogRoutes = require('./routes/blogRoutes');
 
 // ─── Connect to MongoDB (non-blocking — server stays up even if DB is slow) ──
 connectDB();
@@ -159,6 +160,7 @@ app.use('/api/categories', categoryRoutes);
 app.use('/api/templates', templateRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/blogs', blogRoutes);
 
 // ─── Root Route ───────────────────────────────────────────────────────────────
 // ===============================
